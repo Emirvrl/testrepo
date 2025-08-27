@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Yıldızların Fısıldadıkları</title>
+  <link rel="stylesheet" href="styles_fixed.css">
+</head>
+
+
+<div class="container">
+  <div class="header">
+    <h1>YILDIZLARIN FISILDADIKLARI</h1>
+    <p>🌟</p>
+  </div>
+
+  <!-- Günün Falı kutusu -->
+  <div class="fortune-box main-fortune">
+    <div class="fortune-header">
+      <h2>🌟 Günün Falı 🌟</h2>
+      <div class="fortune-date" id="fal_date"></div>
+    </div>
+    <div class="fortune-content" id="fal_text"></div>
+    <div class="fortune-footer">
+      <span class="fortune-number" id="fal_index"></span>
+      <span class="next-fortune" id="fal_counter"></span>
+    </div>
+  </div>
+
+  <!-- Günün Sayısı -->
+  <div class="fortune-box num-bind">
+
+    <div class="fortune-header">
+      <h2>🔢 Günün Sayısı</h2>
+    </div>
+    <div class="fortune-content">
+      <span id="daily_number"></span>
+    </div>
+    <div class="fortune-footer">
+      <span class="fortune-number" id="num_index"></span>
+    </div>
+  </div>
+
+  <!-- Günün Rengi -->
+  <div class="fortune-box color-bind">
+    <div class="fortune-header">
+      <h2>🎨 Günün Rengi</h2>
+    </div>
+    <div class="fortune-content">
+      <span id="daily_color_name"></span>
+    </div>
+    <div class="fortune-footer">
+      <span class="fortune-number" id="color_index"></span>
+    </div>
+  </div>
+
+
+  <div class="status-info">
+    <h3>📊 Sistem Bilgileri</h3>
+    <div class="info-grid">
+
+      <div class="countdown-timer">
+        <h4>⏱️ Bir sonraki güncellemeye kalan süre</h4>
+        <div class="timer-display" id="countdown">--:--:--</div>
+      </div>
+    </div>
+
+
+
+    <script>
+      (function () {
+        "use strict";
+
+
+
+        /* ========== Yardımcılar ========== */
+        function nextUpdateAt6() {
+          const now = new Date();
+          const target = new Date(now);
+          target.setHours(6, 0, 0, 0);
+          if (now >= target) target.setDate(target.getDate() + 1);
+          return target;
+        }
+        function formatDateLong(date) {
+          return date.toLocaleDateString('tr-TR', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+        }
+        function formatTime(date) {
+          return date.toLocaleString('tr-TR', { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+        }
+        function updateCountdown(el) {
+          const target = nextUpdateAt6();
+          const now = new Date();
+          const diff = target - now;
+          if (diff <= 0) { location.reload(); return; }
+          const h = Math.floor(diff / 3_600_000);
+          const m = Math.floor((diff % 3_600_000) / 60_000);
+          const s = Math.floor((diff % 60_000) / 1000);
+          el.textContent = String(h).padStart(2, '0') + ':' + String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0');
+        }
+        function daysSinceEpoch() {
+          const now = new Date();
+          const epoch = new Date('2025-08-27T06:00:00');
+          return Math.floor((now - epoch) / 86_400_000);
+        }
+
+        /* ========== Veri Dizileri ========== */
+        const fortunes = [
+          "Yıldızlar bugün seni küçük bir sürprize hazırlıyor.",
+          "Sessizlik içinde gizli bir fikir filizlenecek.",
+          "Kalbinin sesine kulak ver, beklenmedik bir yol açılacak.",
+          "Bugün eski bir dostunla yeni bir bağ kurabilirsin.",
+          "İçten bir gülümseme tüm karışıklıkları dağıtacak.",
+          "Ufak bir risk, büyük bir mutluluğa kapı aralayacak.",
+          "Düşlerin bir mesaj fısıldıyor; dikkatle dinle.",
+          "Beklenmedik bir karşılaşma sana ilham verecek.",
+          "Sabır, bugün en değerli güç olacak.",
+          "Küçük bir değişim, büyük bir fark yaratacak.",
+          "Sıradan bir an, unutulmaz bir hatıraya dönüşebilir.",
+          "Bugün cesaretin sınanacak, pes etme.",
+          "Sezgilerin sana yol gösterecek.",
+          "Ufak bir jest, büyük bir kalbi kazanacak.",
+          "İçsel huzur, dış dünyadaki kaosu dengeleyecek.",
+          "Hayallerini kağıda dökmek için ideal bir gün.",
+          "Gizli bir yetenek, bugün su yüzüne çıkabilir.",
+          "Bir tebessüm, zincirleme mutluluk yaratacak.",
+          "Kendini keşfetmek için fırsatlar ayağına gelecek.",
+          "Ufak bir tavır, birini derinden etkileyecek.",
+          "Bugün küçük bir hediye büyük bir anlam taşıyacak.",
+          "Sabırlı ol, beklenmedik bir çözüm kapında.",
+          "Kalbindeki soruya cevap, bugünkü sessizlikte saklı.",
+          "Bir adım geri, iki adım ileri kazandıracak.",
+          "Sıradan bir gün, olağanüstü bir anıya dönüşebilir.",
+          "Kendi ışığını fark etmen gereken bir gün.",
+          "Cesur bir adım, yeni kapıları açacak.",
+          "Ufak bir sürpriz, günü renklendirecek.",
+          "Hayallerin bugüne yansıması seni şaşırtacak.",
+          "Bir bakış, tüm düşüncelerini değiştirebilir.",
+          "Düşüncelerin seni doğru yola yönlendirecek.",
+          "Bugün birini affetmek için ideal zaman.",
+          "Küçük bir şans, büyük bir fırsata dönüşebilir.",
+          "Seçimlerin bugünkü kaderini şekillendirecek.",
+          "Sıradan bir an, büyük bir mutluluk getirecek.",
+          "Sessiz bir gözlem, önemli bir farkındalık yaratacak.",
+          "Bugün kalbinle mantığını dengede tut.",
+          "Ufak bir cesaret, büyük bir maceraya kapı açacak.",
+          "Hayallerin için küçük bir adım at.",
+          "İçsel huzur, dış dünyayı da olumlu etkileyecek.",
+          "Bugün yeni bir başlangıç için uygun.",
+          "Eski bir anı, sana ilham verecek.",
+          "Düşüncelerini paylaşmak, beklenmedik destek getirecek.",
+          "Kalbinin rehberliğinde doğru kararlar alacaksın.",
+          "Küçük bir detay, büyük bir fark yaratacak.",
+          "Bugün risk al, ama ölçülü ol.",
+          "Sessiz bir yardım, büyük bir etki yaratacak.",
+          "Kendini ifade etmek için ideal bir gün.",
+          "Bir şans penceresi açılacak, dikkatle yakala.",
+          "Bugün fark etmediğin bir fırsat karşına çıkacak.",
+          "İçsel sesin sana yol gösterecek.",
+          "Ufak bir sabır, büyük bir ödül getirecek.",
+          "Hayat sana bugün beklenmedik bir hediye sunacak.",
+          "Sezgilerin doğrultusunda bir adım at.",
+          "Küçük bir ilgi, büyük bir mutluluk yaratacak.",
+          "Bugün geçmişle yüzleşmek için uygun.",
+          "Yeni bir fikir, bugünü unutulmaz kılacak.",
+          "İçten bir söz, ilişkileri güçlendirecek.",
+          "Bugün bir adım geri at, durumu gözlemle.",
+          "Sessizlik, bugünkü cevabı içinde saklıyor.",
+          "Hayallerin bugün biraz daha gerçek olacak.",
+          "Ufak bir değişiklik, büyük bir fark yaratabilir.",
+          "Kalbinin rehberliğini izle, şaşmazsın.",
+          "Bugün yeni bir dostluk filizlenecek.",
+          "Küçük bir teşekkür, büyük bir etki yaratacak.",
+          "İçsel huzur, dışarıya da yansıyacak.",
+          "Bugün farkında olmadan ilham alacaksın.",
+          "Cesaretin, beklenmedik bir fırsat açacak.",
+          "Sıradan bir an, seni şaşırtacak bir dönemeç yaratabilir.",
+          "Bugün yeni bir fikir seni ileri taşıyacak.",
+          "İçten bir davranış, büyük bir kalbi kazanacak.",
+          "Sabırlı ol, beklenmedik bir destek geliyor.",
+          "Hayallerin bugün küçük bir adımla başlıyor.",
+          "Küçük bir risk, büyük bir kazanç sağlayabilir.",
+          "Sessizlik, cevabı içinde saklıyor.",
+          "Bugün geçmişten bir mesaj alacaksın.",
+          "İçsel rehberlik, doğru karar vermeni sağlayacak.",
+          "Ufak bir dikkat, büyük bir fark yaratacak.",
+          "Cesur bir adım, beklenmedik kapılar açacak.",
+          "Bugün kendine dön, ilhamı orada bul.",
+          "Küçük bir sürpriz, günü özel kılacak.",
+          "Hayallerin seni bugüne yönlendiriyor.",
+          "Sessiz bir gözlem, önemli bir farkındalık getirecek.",
+          "Bugün risk al, ama ölçülü davran.",
+          "Küçük bir yardım, büyük bir etki yaratacak.",
+          "İçten bir söz, bugünü unutulmaz kılacak.",
+          "Ufak bir adım, büyük bir başlangıç olacak.",
+          "Bugün yeni bir fırsat kapını çalacak.",
+          "Sezgilerin doğrultusunda ilerle.",
+          "Kalbinin sesini dinle, cevabı bulacaksın."
+        ];
+
+        const dailyNumbers = [
+          7, 3, 9, 2, 5, 8, 6, 4, 1, 9,
+          2, 7, 5, 3, 6, 8, 4, 1, 9, 2,
+          3, 7, 6, 8, 5, 1, 4, 9, 2, 7,
+          8, 6, 3, 5, 9, 1, 4, 7, 2, 8,
+          5, 3, 9, 6, 1, 7, 4, 2, 8, 5,
+          6, 3, 7, 9, 1, 2, 8, 4, 5, 6,
+          7, 9, 3, 1, 8, 2, 5, 4, 6, 7,
+          9, 8, 2, 3, 7, 5, 1, 4, 6, 8,
+          2, 7, 9, 3, 6, 5, 8, 1, 4, 7
+        ];
+
+        const dailyColors = [
+          { name: "Güneş Sarısı", tones: ["#FFD700", "#FFC300", "#FFB000", "#FFA000", "#FF8C00", "#FF7F00"] },
+          { name: "Turuncu", tones: ["#FFA500", "#FF8C42", "#FF7F50", "#FF6F40", "#FF5A36", "#FF4500"] },
+          { name: "Kırmızı", tones: ["#FF0000", "#E60000", "#CC0000", "#B20000", "#990000", "#800000"] },
+          { name: "Pembe", tones: ["#FFC0CB", "#FFB6C1", "#FF69B4", "#FF1493", "#DB7093", "#C71585"] },
+          { name: "Mor", tones: ["#800080", "#9932CC", "#8A2BE2", "#9400D3", "#BA55D3", "#DDA0DD"] },
+          { name: "Lacivert", tones: ["#000080", "#00008B", "#0000CD", "#191970", "#1E90FF", "#4169E1"] },
+          { name: "Mavi", tones: ["#0000FF", "#1E90FF", "#00BFFF", "#87CEEB", "#4682B4", "#5F9EA0"] },
+          { name: "Turkuaz", tones: ["#40E0D0", "#48D1CC", "#00CED1", "#20B2AA", "#5F9EA0", "#008B8B"] },
+          { name: "Yeşil", tones: ["#008000", "#006400", "#228B22", "#32CD32", "#7CFC00", "#00FF00"] },
+          { name: "Açık Yeşil", tones: ["#98FB98", "#90EE90", "#8FBC8F", "#00FA9A", "#00FF7F", "#3CB371"] },
+          { name: "Kahverengi", tones: ["#A52A2A", "#8B4513", "#D2691E", "#CD853F", "#F4A460", "#DEB887"] },
+          { name: "Bej", tones: ["#F5F5DC", "#FAF0E6", "#FFE4C4", "#FFF8DC", "#FFEBCD", "#FDF5E6"] },
+          { name: "Gri", tones: ["#808080", "#A9A9A9", "#C0C0C0", "#D3D3D3", "#DCDCDC", "#696969"] },
+          { name: "Siyah", tones: ["#000000", "#1C1C1C", "#2F2F2F", "#3B3B3B", "#4B4B4B", "#5A5A5A"] },
+          { name: "Beyaz", tones: ["#FFFFFF", "#FFFAFA", "#F0F0F0", "#F5F5F5", "#FFF5EE", "#F8F8FF"] }
+        ];
+
+        /* ========== Render ========== */
+        function render() {
+          const dayIndex = daysSinceEpoch();
+
+          // Fal
+          const falIndex = dayIndex % fortunes.length;
+          document.getElementById('fal_text').textContent = fortunes[falIndex];
+          document.getElementById('fal_index').textContent = '#' + (falIndex + 1);
+          document.getElementById('fal_date').textContent = formatDateLong(new Date());
+
+          // Sayı
+          const numIndex = dayIndex % dailyNumbers.length;
+          document.getElementById('daily_number').textContent = dailyNumbers[numIndex];
+          document.getElementById('num_index').textContent = '#' + (numIndex + 1);
+
+          // Renk
+          const colorIndex = dayIndex % dailyColors.length;
+          const toneIndex = dayIndex % dailyColors[colorIndex].tones.length;
+          const hex = dailyColors[colorIndex].tones[toneIndex];
+
+          document.getElementById('daily_color_name').textContent = dailyColors[colorIndex].name;
+          document.getElementById('color_index').textContent = '#' + (colorIndex + 1);
+
+          // Günün rengine göre CSS değişkenlerini güncelle
+          const { r, g, b } = hexToRgb(hex);
+          document.documentElement.style.setProperty('--daily-accent', hex);
+          document.documentElement.style.setProperty('--daily-accent-rgb', `${r}, ${g}, ${b}`);
+        }
+
+
+        /* ========== Başlat ========== */
+        function init() {
+          render();
+
+          const c = document.getElementById('countdown');
+          function tick() { updateCountdown(c); }
+          tick();
+          setInterval(tick, 1000);
+
+          // 06:00'da otomatik yenileme güvenliği
+          setInterval(() => {
+            const now = new Date();
+            if (now.getHours() === 6 && now.getMinutes() === 0 && now.getSeconds() <= 1) location.reload();
+          }, 1000);
+        }
+
+        if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+        else init();
+      })();
+
+      function hexToRgb(hex) {
+        const h = hex.replace('#', '');
+        const bigint = parseInt(h, 16);
+        return {
+          r: (bigint >> 16) & 255,
+          g: (bigint >> 8) & 255,
+          b: bigint & 255
+        };
+      }
+
+
+    </script>
+    </body>
+
+</html>
