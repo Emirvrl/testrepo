@@ -25,25 +25,7 @@ body {
   padding: 0;
 }
 
-body::after {
-  content: '';
-  position: fixed;
-  inset: 0;
-  background-image: radial-gradient(ellipse at top, rgba(255, 255, 255, .2), transparent 60%);
-  opacity: .15;
-  z-index: -2;
-}
 
-body::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  background-image: radial-gradient(circle at 20% 30%, rgba(255, 255, 255, .08), transparent 35%),
-    radial-gradient(circle at 80% 70%, rgba(255, 255, 255, .06), transparent 40%);
-  filter: blur(6px);
-  opacity: .2;
-  z-index: -1;
-}
 
 .container {
   max-width: 1000px;
@@ -449,8 +431,4 @@ body::after {
   display: none !important;
 }
 
-html, body {
-  height: 100%;
-  width: 100%;
-  background: url("bg.png") center / cover no-repeat;
-}
+
