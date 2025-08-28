@@ -19,13 +19,12 @@
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   line-height: 1.6;
-  background: var(--bg-gradient-dark);
-  background-attachment: fixed;
+  /* önce resim, altta degrade fallback – fixed yok */
+  background: url("bg.png") center / cover no-repeat, var(--bg-gradient-dark);
+  background-attachment: scroll;        /* iOS için açıkça scroll */
   min-height: 100vh;
   transition: all 0.3s ease;
   position: relative;
-  background: url("bg.png") no-repeat center center;
-  background-size: cover;
 }
 
 body::after {
@@ -57,6 +56,7 @@ body::before {
 .header {
   background: rgba(255, 255, 255, .15);
   backdrop-filter: blur(25px);
+  -webkit-backdrop-filter: blur(25px);
   border-radius: 20px;
   padding: 30px;
   text-align: center;
@@ -97,6 +97,7 @@ body::before {
   box-shadow: 0 12px 40px rgba(0, 0, 0, .15);
   border: 1px solid rgba(255, 255, 255, .15);
   backdrop-filter: blur(30px);
+  -webkit-backdrop-filter: blur(30px);
   position: relative;
   z-index: 10;
   margin-bottom: 30px;
@@ -227,6 +228,7 @@ body::before {
   text-align: center;
   color: white;
   backdrop-filter: blur(25px);
+  -webkit-backdrop-filter: blur(25px);
   border: 1px solid rgba(255, 255, 255), .25;
   margin-bottom: 25px;
 }
@@ -247,6 +249,7 @@ body::before {
   padding: 16px;
   border-radius: 12px;
   backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
 
 .info-item .label {
