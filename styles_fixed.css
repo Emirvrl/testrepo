@@ -114,13 +114,22 @@ body::before {
   background: linear-gradient(135deg,
       rgba(var(--daily-accent-rgb), .07),
       rgba(var(--daily-accent-rgb), .15));
-  animation: mf-pulse 2.6s ease-in-out infinite; /* hafif nabız efekti */
+  animation: mf-pulse 2.6s ease-in-out infinite;
+  /* hafif nabız efekti */
 }
 
-@keyframes mf-pulse{
-  0%   { box-shadow: 0 15px 50px rgba(var(--daily-accent-rgb), .18); }
-  70%  { box-shadow: 0 15px 60px rgba(var(--daily-accent-rgb), .28); }
-  100% { box-shadow: 0 15px 50px rgba(var(--daily-accent-rgb), .18); }
+@keyframes mf-pulse {
+  0% {
+    box-shadow: 0 15px 50px rgba(var(--daily-accent-rgb), .18);
+  }
+
+  70% {
+    box-shadow: 0 15px 60px rgba(var(--daily-accent-rgb), .28);
+  }
+
+  100% {
+    box-shadow: 0 15px 50px rgba(var(--daily-accent-rgb), .18);
+  }
 }
 
 .fortune-header {
@@ -184,7 +193,8 @@ body::before {
       rgba(var(--daily-accent-rgb), .35) 40%,
       transparent 60%);
   pointer-events: none;
-  animation: sheen 4s linear infinite; /* ortak sheen animasyonu */
+  animation: sheen 4s linear infinite;
+  /* ortak sheen animasyonu */
   border-radius: 12px;
 }
 
@@ -270,8 +280,10 @@ body::before {
 
 /* === Günün Rengi kutusu: seçilen renge bağlanan efektler === */
 :root {
-  --daily-accent: #9b59b6;       /* JS güncelleyecek */
-  --daily-accent-rgb: 155, 89, 182; /* JS güncelleyecek */
+  --daily-accent: #9b59b6;
+  /* JS güncelleyecek */
+  --daily-accent-rgb: 155, 89, 182;
+  /* JS güncelleyecek */
 }
 
 /* Kutu kenarında yumuşak ışıma ve vurgu çizgisi */
@@ -311,8 +323,13 @@ body::before {
 }
 
 @keyframes sheen {
-  0%   { transform: translateX(-120%); }
-  100% { transform: translateX(120%); }
+  0% {
+    transform: translateX(-120%);
+  }
+
+  100% {
+    transform: translateX(120%);
+  }
 }
 
 /* Küçük renk kapsülü hafif nabız atsın */
@@ -322,9 +339,17 @@ body::before {
 }
 
 @keyframes pulse {
-  0%   { box-shadow: 0 0 0 0 rgba(var(--daily-accent-rgb), .35); }
-  70%  { box-shadow: 0 0 0 16px rgba(var(--daily-accent-rgb), 0); }
-  100% { box-shadow: 0 0 0 0 rgba(var(--daily-accent-rgb), .0); }
+  0% {
+    box-shadow: 0 0 0 0 rgba(var(--daily-accent-rgb), .35);
+  }
+
+  70% {
+    box-shadow: 0 0 0 16px rgba(var(--daily-accent-rgb), 0);
+  }
+
+  100% {
+    box-shadow: 0 0 0 0 rgba(var(--daily-accent-rgb), .0);
+  }
 }
 
 /* === Günün Sayısı kutusu (renge bağlı + kayan parıltı) === */
@@ -357,12 +382,24 @@ body::before {
 }
 
 @keyframes sheenNum {
-  0%   { transform: translateX(-120%); }
-  100% { transform: translateX(120%); }
+  0% {
+    transform: translateX(-120%);
+  }
+
+  100% {
+    transform: translateX(120%);
+  }
 }
 
 /* Başlık/altlık çizgileri renge bağlı */
 .num-bind .fortune-header,
-.num-bind .fortune-footer{
+.num-bind .fortune-footer {
   border-color: rgba(var(--daily-accent-rgb), .35);
+}
+
+#num_index,
+#color_index,
+#fal_date,  
+#fal_index { 
+  display: none !important;
 }
